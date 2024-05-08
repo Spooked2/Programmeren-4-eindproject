@@ -1,7 +1,8 @@
 import '../css/style.css'
-import { Actor, Engine, Vector } from "excalibur";
+import {Actor, Engine, Input, Vector} from "excalibur";
 import { Resources, ResourceLoader } from './resources.js';
 import { Fish } from "./fish.js";
+import { Knight } from "./knight.js";
 import { Background } from "./background.js";
 
 export class Game extends Engine {
@@ -17,12 +18,16 @@ export class Game extends Engine {
         const background = new Background;
         this.add(background);
 
+        const knight = new Knight;
+        this.add(knight);
+
         for (let i = 0; i < 100; i++) {
             const fish = new Fish();
             this.add(fish);
         }
 
     }
+
 }
 
 new Game()
