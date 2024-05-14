@@ -4,12 +4,10 @@ import { Resources } from './resources.js';
 const random = new Random;
 
 export class Fish extends Actor {
-    constructor() {
+    constructor(position) {
         super();
 
         this.graphics.use(Resources.Fish.toSprite());
-        this.pos = new Vector(random.integer(1, 800), random.integer(1, 600));
-        this.vel = new Vector(random.integer(-20, 20), random.integer(-20, 20));
 
         this.scale = new Vector (0.4, 0.4);
 

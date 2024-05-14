@@ -1,5 +1,5 @@
 import '../css/style.css'
-import {Actor, BoundingBox, DisplayMode, Engine, Input, Vector} from "excalibur";
+import {Actor, BoundingBox, DisplayMode, Engine, Input, Vector, Random} from "excalibur";
 import { Resources, ResourceLoader } from './resources.js';
 import { Fish } from "./fish.js";
 import { Knight } from "./knight.js";
@@ -12,6 +12,8 @@ export class Game extends Engine {
         this.start(ResourceLoader).then(() => this.startGame())
     }
 
+    random = new Random;
+
     startGame() {
         console.log("start de game!");
 
@@ -23,8 +25,10 @@ export class Game extends Engine {
         const knight = new Knight;
         this.add(knight);
 
-        for (let i = 0; i < 10; i++) {
+        for (let i = 0; i < 40; i++) {
             const fish = new Fish();
+            fish.pos = this.enemySpawnPosition();
+            fish.actions.meet(knight, 60);
             this.add(fish);
         }
 
@@ -35,6 +39,22 @@ export class Game extends Engine {
 
     }
 
+    enemySpawnPosition() {
+        let vector = new Vector(0, 0)
+        let vp = this.currentScene.camera.viewport;
+
+        switch (this.random.d4()) {
+            case 1: vector.y = vp.top; vector.x = this.random.floating(vp.left, vp.right); break;
+            case 2: vector.y = vp.bottom; vector.x = this.random.floating(vp.left, vp.right); break;
+            case 3: vector.x = vp.left; vector.y = this.random.floating(vp.top, vp.bottom); break;
+            case 4: vector.x = vp.right; vector.y = this.random.floating(vp.top, vp.bottom);
+        }
+
+        return vector;
+
+    }
+
 }
 
 new Game()
+
