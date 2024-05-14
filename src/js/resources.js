@@ -5,7 +5,7 @@ const Resources = {
     Knight: new ImageSource('images/knight.png'),
     Gun: new ImageSource('images/777_magnum.png'),
     Bullet: new ImageSource('images/bullet.png'),
-    Background: new ImageSource('images/background.jpg')
+    Background: new ImageSource('images/background_3.jpg')
 }
 const ResourceLoader = new Loader([
     Resources.Fish,

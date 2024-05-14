@@ -8,7 +8,9 @@ export class Background extends Actor {
 
         this.graphics.use(Resources.Background.toSprite());
 
-        this.addComponent(new ParallaxComponent(new Vector(0.5, 0.5)));
+        // this.addComponent(new ParallaxComponent(new Vector(0.5, 0.5)));
+
+        this.pos = new Vector(750, 750)
 
     }
 

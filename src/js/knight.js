@@ -5,15 +5,15 @@ const random = new Random;
 
 export class Knight extends Actor {
     constructor() {
-        super();
+        super({width: Resources.Knight.width, height: Resources.Knight.height});
 
         //Set properties
-        this.moveSpeed = 50;
+        this.moveSpeed = 100;
 
         //Set sprite
         this.graphics.use(Resources.Knight.toSprite());
-        this.pos = new Vector(400, 300);
-
+        this.pos = new Vector(750, 750);
+        this.scale = new Vector(0.5, 0.5);
 
     }
 
@@ -45,7 +45,6 @@ export class Knight extends Actor {
         }
 
         this.vel = new Vector(xSpeed, ySpeed);
-
 
 
     }
