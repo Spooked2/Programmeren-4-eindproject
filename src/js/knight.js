@@ -61,7 +61,7 @@ export class Knight extends Actor {
         //Handle movement
         let ySpeed = 0;
         let xSpeed = 0;
-        let kb = engine.input.keyboard
+        let kb = engine.input.keyboard;
 
         if (kb.isHeld(Keys.W)) {
             ySpeed -= this.moveSpeed;
@@ -94,7 +94,10 @@ export class Knight extends Actor {
     collisionHandler(e) {
 
         //Don't do anything if player collides with player's own bullets, gun or if the player is invincible
-        if (e.other instanceof Bullet || this.invincible === true || e.other instanceof Gun) {
+        if (e.other instanceof Bullet
+            || this.invincible === true
+            || e.other instanceof Gun
+            || document.querySelector(`img:last-child`) === null) {
             return;
         }
 

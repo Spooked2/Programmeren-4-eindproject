@@ -4,6 +4,7 @@ import { Resources, ResourceLoader } from './resources.js';
 import { Fish } from "./fish.js";
 import { Knight } from "./knight.js";
 import { Background } from "./background.js";
+import { Crosshair } from "./crosshair.js";
 
 let ui;
 
@@ -16,7 +17,7 @@ export class Game extends Engine {
             width: 1920,
             height: 1080,
             displayMode: DisplayMode.FitScreen,
-            physics: { solver: SolverStrategy.Realistic },
+            physics: { solver: SolverStrategy.Arcade },
             canvasElementId: 'game',
             pointerScope: Input.PointerScope.Canvas
         })
@@ -31,6 +32,9 @@ export class Game extends Engine {
 
         const background = new Background;
         this.add(background);
+
+        const crosshair = new Crosshair;
+        this.add(crosshair);
 
         const knight = new Knight;
         this.add(knight);
@@ -82,7 +86,7 @@ export class Game extends Engine {
         //Add hearts equal to knight's starting health
         for (let i = 0; i < knight.health; i++) {
             let heart = document.createElement('img');
-            heart.src = 'public/images/heart.png';
+            heart.src = 'images/heart.png';
             healthContainer.appendChild(heart);
         }
 
