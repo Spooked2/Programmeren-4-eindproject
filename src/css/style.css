@@ -3,3 +3,27 @@ body {
     padding:0;
     background-color:darkgray;
 }
+
+#root {
+    position: relative;
+}
+
+#ui {
+    position: absolute;
+}
+
+#statContainer {
+    display: flex;
+    padding: 15px 50px;
+    justify-content: space-between;
+}
+
+#healthContainer {
+    display: flex;
+    gap: 5px;
+
+    img {
+        max-width: 64px;
+    }
+}
+

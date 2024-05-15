@@ -5,7 +5,11 @@ const random = new Random;
 
 export class Fish extends Actor {
     constructor() {
-        super({width: Resources.Fish.width, height: Resources.Fish.height, collisionType: CollisionType.Fixed});
+        super({
+            width: Resources.Fish.width,
+            height: Resources.Fish.height,
+            collisionType: CollisionType.Active
+        });
 
         this.graphics.use(Resources.Fish.toSprite());
 
@@ -17,7 +21,13 @@ export class Fish extends Actor {
 
     }
 
+    onInitialize(engine) {
+
+
+    }
+
     collisionHandler() {
+
 
 
 

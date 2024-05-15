@@ -1,29 +1,42 @@
 import '../css/style.css'
-import {Actor, BoundingBox, DisplayMode, Engine, Input, Vector, Random} from "excalibur";
+import {Actor, BoundingBox, DisplayMode, Engine, Input, Vector, Random, SolverStrategy} from "excalibur";
 import { Resources, ResourceLoader } from './resources.js';
 import { Fish } from "./fish.js";
 import { Knight } from "./knight.js";
 import { Background } from "./background.js";
 
+let ui;
+
 export class Game extends Engine {
 
+    random = new Random;
+
     constructor() {
-        super({ width: 1920, height: 1080, displayMode: DisplayMode.FitScreen })
+        super({
+            width: 1920,
+            height: 1080,
+            displayMode: DisplayMode.FitScreen,
+            physics: { solver: SolverStrategy.Realistic },
+            canvasElementId: 'game',
+            pointerScope: Input.PointerScope.Canvas
+        })
         this.start(ResourceLoader).then(() => this.startGame())
     }
 
-    random = new Random;
 
     startGame() {
         console.log("start de game!");
 
+        ui = document.getElementById('ui');
 
         const background = new Background;
         this.add(background);
 
-
         const knight = new Knight;
         this.add(knight);
+
+        //Create UI elements with HTML
+        this.createUI(knight);
 
         for (let i = 0; i < 40; i++) {
             const fish = new Fish();
@@ -52,6 +65,32 @@ export class Game extends Engine {
 
         return vector;
 
+    }
+
+    createUI(knight) {
+        //Make containers for health and clock
+        let statContainer = document.createElement('div');
+        statContainer.id = 'statContainer';
+
+        let healthContainer = document.createElement('div');
+        healthContainer.id = 'healthContainer';
+
+        let clockContainer = document.createElement('div');
+        clockContainer.id = 'clockContainer';
+
+
+        //Add hearts equal to knight's starting health
+        for (let i = 0; i < knight.health; i++) {
+            let heart = document.createElement('img');
+            heart.src = 'public/images/heart.png';
+            healthContainer.appendChild(heart);
+        }
+
+        //Add them to the ui
+        statContainer.appendChild(healthContainer);
+        statContainer.appendChild(clockContainer);
+
+        ui.appendChild(statContainer);
     }
 
 }
