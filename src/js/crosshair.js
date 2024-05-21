@@ -13,11 +13,15 @@ export class Crosshair extends Actor {
     }
 
     onInitialize(engine) {
-        this.pos = engine.input.pointers.primary.lastWorldPos.clone();
+        this.pos = new Vector(-750, -750)
+        // this.pos = engine.input.pointers.primary.lastScreenPos.clone();
+        // this.pos = engine.input.pointers.primary.lastPagePos.clone();
     }
 
     onPreUpdate(engine, delta) {
         this.pos = engine.input.pointers.primary.lastWorldPos.clone();
+        this.pos.x -= 750;
+        this.pos.y -= 750;
     }
 
 }

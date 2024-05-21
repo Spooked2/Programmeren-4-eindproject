@@ -19,7 +19,8 @@ export class Game extends Engine {
             displayMode: DisplayMode.FitScreen,
             physics: { solver: SolverStrategy.Arcade },
             canvasElementId: 'game',
-            pointerScope: Input.PointerScope.Canvas
+            pointerScope: Input.PointerScope.Canvas,
+            fixedUpdateFps: 60
         })
         this.start(ResourceLoader).then(() => this.startGame())
     }
@@ -33,11 +34,10 @@ export class Game extends Engine {
         const background = new Background;
         this.add(background);
 
-        const crosshair = new Crosshair;
-        this.add(crosshair);
-
         const knight = new Knight;
         this.add(knight);
+
+        // this.add(new Crosshair());
 
         //Create UI elements with HTML
         this.createUI(knight);

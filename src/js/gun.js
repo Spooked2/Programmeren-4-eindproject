@@ -43,6 +43,9 @@ export class Gun extends Actor {
         engine.input.pointers.primary.on('down', (e) => {
             this.shoot(e, engine);
         });
+
+        this.actions.rotateTo(Math.PI, 50)
+
     }
 
     shoot(e, engine) {

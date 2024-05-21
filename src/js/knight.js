@@ -2,6 +2,7 @@ import {Actor, Vector, Random, Keys, Timer, CollisionType} from "excalibur";
 import {Resources} from './resources.js';
 import {Bullet} from './bullet.js';
 import {Gun} from './gun.js';
+import {Crosshair} from "./crosshair.js";
 
 const random = new Random;
 
@@ -53,6 +54,7 @@ export class Knight extends Actor {
         engine.currentScene.add(this.invincibilityTimer);
 
         this.addChild(new Gun);
+        // this.addChild(new Crosshair());
 
     }
 
