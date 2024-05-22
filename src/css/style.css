@@ -10,12 +10,15 @@ body {
 
 #ui {
     position: absolute;
+
 }
 
 #statContainer {
+    width: 100%;
     display: flex;
     padding: 15px 50px;
     justify-content: space-between;
+    align-items: center;
 }
 
 #healthContainer {
@@ -24,6 +27,7 @@ body {
 
     img {
         max-width: 64px;
+        max-height: 64px;
     }
 }
 

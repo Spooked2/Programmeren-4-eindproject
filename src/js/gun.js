@@ -33,7 +33,7 @@ export class Gun extends Actor {
 
         this.scale = new Vector(0.5, 0.5);
 
-        this.pos = new Vector(-70, 10);
+        this.pos = new Vector(-50, 10);
 
     }
 
