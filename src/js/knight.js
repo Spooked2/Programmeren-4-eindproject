@@ -3,6 +3,7 @@ import {Resources} from './resources.js';
 import {Bullet} from './bullet.js';
 import {Gun} from './gun.js';
 import {Crosshair} from "./crosshair.js";
+import {Enemy} from "./enemy.js";
 
 const random = new Random;
 
@@ -15,6 +16,7 @@ export class Knight extends Actor {
     weapon;
     invincible = false;
     invincibilityTimer;
+    engine;
 
     constructor(selectedWeapon) {
         super({
@@ -54,6 +56,7 @@ export class Knight extends Actor {
 
     onInitialize(engine) {
         engine.currentScene.add(this.invincibilityTimer);
+        this.engine = engine;
 
         this.addChild(this.weapon);
 
@@ -96,10 +99,9 @@ export class Knight extends Actor {
 
     collisionHandler(e) {
 
-        //Don't do anything if player collides with player's own bullets, gun or if the player is invincible
-        if (e.other instanceof Bullet
+        //Don't do anything if player collides with things that aren't an enemy or if the player is invincible
+        if (!(e.other instanceof Enemy)
             || this.invincible === true
-            || e.other instanceof Gun
             || document.querySelector(`img:last-child`) === null) {
             return;
         }
@@ -117,6 +119,10 @@ export class Knight extends Actor {
         }
 
         //Push all enemies around player away
+        const enemies = this.engine.currentScene.actors.filter(this.filterEnemy);
+        for (const enemy of enemies) {
+            enemy.pushAway();
+        }
 
         //Turn player invincible for a few seconds after getting hit
         this.invincible = true;
@@ -125,5 +131,12 @@ export class Knight extends Actor {
 
 
     }
+
+    filterEnemy(actor) {
+        if (actor instanceof Enemy) {
+            return actor;
+        }
+    }
+
 
 }

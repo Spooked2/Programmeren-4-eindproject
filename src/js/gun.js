@@ -1,4 +1,4 @@
-import {Actor, Vector, Timer, CollisionType} from "excalibur";
+import {Actor, Vector, Timer, CollisionType, RotationType} from "excalibur";
 import {Resources} from './resources.js';
 import {Bullet} from './bullet.js';
 
@@ -7,6 +7,7 @@ export class Gun extends Actor {
     shotCooldown;
     shotCooldownTimer;
     shotCooldownActive;
+    damage;
 
     constructor() {
         super({
@@ -17,6 +18,7 @@ export class Gun extends Actor {
 
         this.shotCooldown = 200;
         this.shotCooldownActive = false;
+        this.damage = 25;
 
         this.shotCooldownTimer = new Timer({
             fcn: () => {
@@ -37,15 +39,15 @@ export class Gun extends Actor {
 
     onInitialize(engine) {
         engine.currentScene.add(this.shotCooldownTimer);
-
-        console.log(this);
     }
 
     onPreUpdate(engine, delta) {
-        if (engine.input.keyboard.isHeld('ArrowRight') ||
-            engine.input.keyboard.isHeld('ArrowUp') ||
-            engine.input.keyboard.isHeld('ArrowLeft') ||
-            engine.input.keyboard.isHeld('ArrowDown')
+        const kb = engine.input.keyboard;
+
+        if (kb.isHeld('ArrowRight') ||
+            kb.isHeld('ArrowUp') ||
+            kb.isHeld('ArrowLeft') ||
+            kb.isHeld('ArrowDown')
         ){
             this.shoot(engine);
         }
@@ -64,12 +66,11 @@ export class Gun extends Actor {
         this.shotCooldownTimer.start();
 
         //Rotate the gun based on input
-        this.actions.rotateTo(this.getRotateAngle(engine), 100);
+        this.actions.rotateTo(this.getRotateAngle(engine), 20, RotationType.ShortestPath);
 
 
         //Create a bullet
-        let bullet = new Bullet(this.rotation);
-        bullet.pos = this.getGlobalPos().clone();
+        let bullet = new Bullet(this.rotation, this.getGlobalPos().clone(), this.damage);
 
         engine.currentScene.add(bullet);
 
