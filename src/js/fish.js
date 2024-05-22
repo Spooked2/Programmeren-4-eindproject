@@ -6,12 +6,13 @@ const random = new Random;
 
 export class Fish extends Enemy {
 
-    constructor() {
+    constructor(spawnPosition) {
         super(Resources.Fish.width, Resources.Fish.height);
 
         this.graphics.use(Resources.Fish.toSprite());
 
         this.scale = new Vector(0.4, 0.4);
+        this.pos = spawnPosition;
     }
 
     onInitialize(engine) {
