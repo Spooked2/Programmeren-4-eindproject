@@ -113,7 +113,15 @@ export class Church extends Scene {
 
         this.countdown--;
 
-        this.uiClock.innerText = `${Math.floor(this.countdown / 60)}:${this.countdown % 60}`;
+        let extraZero;
+
+        if ((this.countdown % 60) < 10) {
+            extraZero = 0;
+        } else {
+            extraZero = '';
+        }
+
+        this.uiClock.innerText = `${Math.floor(this.countdown / 60)}:${extraZero}${this.countdown % 60}`;
 
 
     }
