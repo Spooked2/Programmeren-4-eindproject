@@ -3,7 +3,7 @@ import {Resources} from './resources.js';
 
 export class Bullet extends Actor {
 
-    gunRotation;
+    // gunRotation;
     lifeTime;
     lifeTimeTimer;
     speed;

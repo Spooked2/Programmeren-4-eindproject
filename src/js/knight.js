@@ -12,10 +12,11 @@ export class Knight extends Actor {
 
     moveSpeed;
     health;
+    weapon;
     invincible = false;
     invincibilityTimer;
 
-    constructor() {
+    constructor(selectedWeapon) {
         super({
             width: Resources.Knight.width,
             height: Resources.Knight.height,
@@ -25,12 +26,13 @@ export class Knight extends Actor {
         //Set properties
         this.moveSpeed = 100;
         this.health = 4;
+        this.weapon = selectedWeapon;
 
         //Miscellaneous
         this.invincibilityTimer = new Timer({
-            fcn: () => {this.invincible = false},
+            fcn: () => {this.invincible = false; this.actions.clearActions()},
             repeats: false,
-            interval: 3000
+            interval: 2000
         })
 
 
@@ -53,8 +55,7 @@ export class Knight extends Actor {
     onInitialize(engine) {
         engine.currentScene.add(this.invincibilityTimer);
 
-        this.addChild(new Gun);
-        // this.addChild(new Crosshair());
+        this.addChild(this.weapon);
 
     }
 
@@ -119,6 +120,7 @@ export class Knight extends Actor {
 
         //Turn player invincible for a few seconds after getting hit
         this.invincible = true;
+        this.actions.blink(100, 100, 99);
         this.invincibilityTimer.start();
 
 

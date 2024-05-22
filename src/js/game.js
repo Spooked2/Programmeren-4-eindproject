@@ -5,6 +5,7 @@ import { Fish } from "./fish.js";
 import { Knight } from "./knight.js";
 import { Background } from "./background.js";
 import { Crosshair } from "./crosshair.js";
+import {Gun} from "./gun.js";
 
 let ui;
 
@@ -34,7 +35,7 @@ export class Game extends Engine {
         const background = new Background;
         this.add(background);
 
-        const knight = new Knight;
+        const knight = new Knight(new Gun());
         this.add(knight);
 
         // this.add(new Crosshair());
