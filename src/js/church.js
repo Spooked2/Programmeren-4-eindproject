@@ -7,10 +7,15 @@ import {Fish} from "./fish.js";
 
 export class Church extends Scene {
 
-    ui;
     random = new Random;
     countdown = 600;
+    ui;
     uiClock;
+    enemySpawnRate = 5;
+    enemySpawnAmount = 3;
+    allowedEnemies = {
+        fish: true
+    };
 
     onInitialize(engine) {
 
@@ -37,12 +42,6 @@ export class Church extends Scene {
         //Create UI elements with HTML
         this.createUI(knight);
 
-        for (let i = 0; i < 40; i++) {
-            const fish = new Fish();
-            fish.pos = this.enemySpawnPosition();
-            fish.actions.meet(knight, 60);
-            this.add(fish);
-        }
 
         this.camera.strategy.lockToActor(knight)
         this.camera.zoom = 2;
@@ -111,6 +110,7 @@ export class Church extends Scene {
 
     secondHandler() {
 
+        //Handle ui and countdown
         this.countdown--;
 
         let extraZero;
@@ -122,6 +122,15 @@ export class Church extends Scene {
         }
 
         this.uiClock.innerText = `${Math.floor(this.countdown / 60)}:${extraZero}${this.countdown % 60}`;
+
+
+        //Handle enemy spawning
+        if ((this.countdown % this.enemySpawnRate) === 0) {
+            for (let i = 0; i < this.enemySpawnAmount; i++) {
+                let fish = new Fish(this.enemySpawnPosition());
+                this.add(fish);
+            }
+        }
 
 
     }
