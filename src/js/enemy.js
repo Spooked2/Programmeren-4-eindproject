@@ -1,5 +1,6 @@
-import {Actor, Vector, Random, CollisionType, Timer} from "excalibur";
+import {Actor, Vector, Random, CollisionType, Timer, DegreeOfFreedom} from "excalibur";
 import {Knight} from "./knight.js";
+import {Exp} from "./exp.js";
 
 const random = new Random;
 
@@ -9,6 +10,8 @@ export class Enemy extends Actor {
     speed;
     health;
     knight;
+    engine;
+    expValue;
 
     constructor(width, height) {
         super({
@@ -17,8 +20,13 @@ export class Enemy extends Actor {
             collisionType: CollisionType.Active
         });
 
+        //Initialize some default values just in case
         this.health = 25;
         this.speed = 60;
+        this.expValue = 1;
+        this.body.bounciness = 0;
+        this.body.limitDegreeOfFreedom.push(DegreeOfFreedom.Rotation);
+        this.body.mass = 40;
 
     }
 
@@ -34,6 +42,8 @@ export class Enemy extends Actor {
         engine.add(this.pushAwayTimer);
 
         this.actions.meet(this.knight, this.speed);
+
+        this.engine = engine;
     }
 
     pushAway() {
@@ -50,9 +60,16 @@ export class Enemy extends Actor {
         this.health -= damage;
 
         if (this.health <= 0) {
-            this.kill();
+            this.deathHandler();
         }
 
+    }
+
+    deathHandler() {
+
+        this.engine.add(new Exp(this.expValue, this.pos.clone()));
+
+        this.kill();
     }
 
 

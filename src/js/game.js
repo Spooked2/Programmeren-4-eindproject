@@ -1,9 +1,7 @@
-import '../css/style.css'
+import '../css/style.css';
 import {DisplayMode, Engine, Input, SolverStrategy} from "excalibur";
 import {ResourceLoader} from './resources.js';
 import {Church} from "./church.js";
-
-let ui;
 
 export class Game extends Engine {
 
@@ -12,10 +10,11 @@ export class Game extends Engine {
             width: 1920,
             height: 1080,
             displayMode: DisplayMode.FitScreen,
-            physics: {solver: SolverStrategy.Arcade},
+            physics: {solver: SolverStrategy.Realistic},
             canvasElementId: 'game',
             pointerScope: Input.PointerScope.Canvas,
-            fixedUpdateFps: 60
+            fixedUpdateFps: 60,
+            pixelArt: true
         })
         this.start(ResourceLoader).then(() => this.startGame())
     }
@@ -33,5 +32,5 @@ export class Game extends Engine {
 
 }
 
-new Game()
+new Game();
 

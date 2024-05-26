@@ -1,4 +1,4 @@
-import {Actor, Vector, Timer, CollisionType, RotationType} from "excalibur";
+import {Actor, Vector, Timer, CollisionType, RotationType, DegreeOfFreedom} from "excalibur";
 import {Resources} from './resources.js';
 import {Bullet} from './bullet.js';
 
@@ -13,12 +13,13 @@ export class Gun extends Actor {
         super({
             width: Resources.Gun.width,
             height: Resources.Gun.height,
-            collisionType: CollisionType.PreventCollision
+            collisionType: CollisionType.PreventCollision,
         });
 
         this.shotCooldown = 200;
         this.shotCooldownActive = false;
         this.damage = 25;
+        this.body.limitDegreeOfFreedom.push(DegreeOfFreedom.Rotation);
 
         this.shotCooldownTimer = new Timer({
             fcn: () => {
