@@ -10,6 +10,7 @@ export class Knight extends Actor {
     //Properties (variables)
     moveSpeed;
     health;
+    healthMax;
     weapon;
     invincible = false;
     invincibilityTimer;
@@ -29,6 +30,7 @@ export class Knight extends Actor {
         //Set properties
         this.moveSpeed = 100;
         this.health = 4;
+        this.healthMax = 4;
         this.weapon = selectedWeapon;
         this.totalExp = 0;
         this.newExp = 0;
@@ -114,9 +116,7 @@ export class Knight extends Actor {
         }
 
         //Don't do anything if player collides with things that aren't an enemy or if the player is invincible
-        if (!(e.other instanceof Enemy)
-            || this.invincible === true
-            || document.querySelector(`img:last-child`) === null) {
+        if (!(e.other instanceof Enemy) || this.invincible === true) {
             return;
         }
 
@@ -124,8 +124,7 @@ export class Knight extends Actor {
         this.health--;
 
         //Update the UI
-        const ui = document.getElementById('healthContainer');
-        ui.removeChild(document.querySelector(`img:last-child`));
+        this.engine.currentScene.updateHealthUi(this);
 
         //Don't bother with anything else if health is 0
         if (this.health === 0) {

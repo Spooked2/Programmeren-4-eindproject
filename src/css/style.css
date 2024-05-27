@@ -47,3 +47,11 @@ body {
     height: 100%;
 }
 
+.heart {
+    content: url("/public/images/heart.png");
+}
+
+.broken {
+    content: url("/public/images/heart_broken.png");
+}
+

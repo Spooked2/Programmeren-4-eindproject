@@ -13,6 +13,8 @@ export class Church extends Scene {
     uiClock;
     expBar;
     levelText;
+    uiHearts;
+    uiHealthContainer;
     surviveTimer;
     enemySpawnRate = 5;
     enemySpawnAmount = 3;
@@ -24,6 +26,7 @@ export class Church extends Scene {
     onInitialize(engine) {
 
         this.ui = document.getElementById('ui');
+        this.uiHearts = [];
 
         const background = new Background;
         this.add(background);
@@ -61,19 +64,19 @@ export class Church extends Scene {
 
         switch (this.random.d4()) {
             case 1:
-                vector.y = vp.top;
+                vector.y = vp.top - 100;
                 vector.x = this.random.floating(vp.left, vp.right);
                 break;
             case 2:
-                vector.y = vp.bottom;
+                vector.y = vp.bottom + 100;
                 vector.x = this.random.floating(vp.left, vp.right);
                 break;
             case 3:
-                vector.x = vp.left;
+                vector.x = vp.left - 100;
                 vector.y = this.random.floating(vp.top, vp.bottom);
                 break;
             case 4:
-                vector.x = vp.right;
+                vector.x = vp.right + 100;
                 vector.y = this.random.floating(vp.top, vp.bottom);
         }
 
@@ -88,15 +91,11 @@ export class Church extends Scene {
 
 
         //Health
-        let healthContainer = document.createElement('div');
-        healthContainer.id = 'healthContainer';
+        this.uiHealthContainer = document.createElement('div');
+        this.uiHealthContainer.id = 'healthContainer';
 
         //Add hearts equal to knight's starting health
-        for (let i = 0; i < knight.health; i++) {
-            let heart = document.createElement('img');
-            heart.src = 'images/heart.png';
-            healthContainer.appendChild(heart);
-        }
+        this.updateHealthUi(knight);
 
 
         //Exp
@@ -128,7 +127,7 @@ export class Church extends Scene {
 
 
         //Add them to the ui
-        statContainer.appendChild(healthContainer);
+        statContainer.appendChild(this.uiHealthContainer);
         statContainer.appendChild(expContainer);
         statContainer.appendChild(levelContainer);
         statContainer.appendChild(clockContainer);
@@ -166,6 +165,36 @@ export class Church extends Scene {
             }
         }
 
+
+    }
+
+    updateHealthUi(knight) {
+
+        while (knight.healthMax > this.uiHearts.length) {
+
+            let heart = document.createElement('img');
+            heart.classList.add('heart');
+            this.uiHearts.unshift(heart);
+            this.uiHealthContainer.appendChild(heart);
+
+        }
+
+        let difference = knight.healthMax - knight.health;
+
+        //Not sure if this is a good optimization thing
+        // if (difference === 0 && this.uiHearts.every((heart) => heart.classList.contains('heart'))) {
+        //     return
+        // }
+
+        for (let i = 0; i < knight.healthMax; i++) {
+
+            if (difference > i) {
+                this.uiHearts[i].classList.replace('heart', 'broken');
+            } else {
+                this.uiHearts[i].classList.replace('broken', 'heart');
+            }
+
+        }
 
     }
 
