@@ -26,7 +26,7 @@ export class Enemy extends Actor {
         this.expValue = 1;
         this.body.bounciness = 0;
         this.body.limitDegreeOfFreedom.push(DegreeOfFreedom.Rotation);
-        this.body.mass = 40;
+        this.body.mass = 10;
 
     }
 

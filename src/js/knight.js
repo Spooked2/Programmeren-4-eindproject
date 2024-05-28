@@ -28,7 +28,7 @@ export class Knight extends Actor {
         });
 
         //Set properties
-        this.moveSpeed = 100;
+        this.moveSpeed = 120;
         this.health = 4;
         this.healthMax = 4;
         this.weapon = selectedWeapon;
@@ -36,17 +36,21 @@ export class Knight extends Actor {
         this.newExp = 0;
         this.levelThreshold = 10;
         this.level = 0;
+        this.body.mass = 30;
         this.body.bounciness = 1;
+        // this.body.friction = 300;
         this.body.limitDegreeOfFreedom.push(DegreeOfFreedom.Rotation);
 
 
         //Miscellaneous
         this.invincibilityTimer = new Timer({
-            fcn: () => {this.invincible = false; this.actions.clearActions()},
+            fcn: () => {
+                this.invincible = false;
+                this.actions.clearActions()
+            },
             repeats: false,
             interval: 2000
         })
-
 
 
         //Set sprite
@@ -75,27 +79,45 @@ export class Knight extends Actor {
     onPreUpdate(engine, delta) {
 
         //Handle movement
-        let ySpeed = 0;
-        let xSpeed = 0;
+
         let kb = engine.input.keyboard;
+        let acceleration = this.moveSpeed / 1.5;
 
         if (kb.isHeld(Keys.W)) {
-            ySpeed -= this.moveSpeed;
+            this.body.applyImpulse(this.pos, new Vector(0, -acceleration));
+        } else if (this.vel.y < 0) {
+            this.body.applyImpulse(this.pos, new Vector(0, this.moveSpeed));
         }
 
         if (kb.isHeld(Keys.S)) {
-            ySpeed += this.moveSpeed;
+            this.body.applyImpulse(this.pos, new Vector(0, acceleration));
+        } else if (this.vel.y > 0) {
+            this.body.applyImpulse(this.pos, new Vector(0, -this.moveSpeed));
         }
 
         if (kb.isHeld(Keys.A)) {
-            xSpeed -= this.moveSpeed;
+            this.body.applyImpulse(this.pos, new Vector(-acceleration, 0));
+        } else if (this.vel.x < 0) {
+            this.body.applyImpulse(this.pos, new Vector(this.moveSpeed, 0));
         }
 
         if (kb.isHeld(Keys.D)) {
-            xSpeed += this.moveSpeed;
+            this.body.applyImpulse(this.pos, new Vector(acceleration, 0));
+        } else if (this.vel.x > 0) {
+            this.body.applyImpulse(this.pos, new Vector(-this.moveSpeed, 0));
         }
 
-        this.vel = new Vector(xSpeed, ySpeed);
+        if (this.vel.x > this.moveSpeed) {
+            this.vel.x = this.moveSpeed;
+        } else if (this.vel.x < -this.moveSpeed) {
+            this.vel.x = -this.moveSpeed;
+        }
+
+        if (this.vel.y > this.moveSpeed) {
+            this.vel.y = this.moveSpeed;
+        } else if (this.vel.y < -this.moveSpeed) {
+            this.vel.y = -this.moveSpeed;
+        }
 
         //Handle death
         if (this.health === 0) {
