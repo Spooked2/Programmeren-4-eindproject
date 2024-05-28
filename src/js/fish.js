@@ -18,7 +18,7 @@ export class Fish extends Enemy {
     onInitialize(engine) {
         this.initializeSuper(engine);
 
-        this.health = 75;
+        this.health = 50;
         this.speed = 60;
 
     }

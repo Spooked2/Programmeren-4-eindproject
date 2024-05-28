@@ -8,7 +8,11 @@ export class Gun extends Actor {
     shotCooldownTimer;
     shotCooldownActive;
     damage;
-    holdFire;
+    maxAmmo;
+    ammo;
+    reloadTimer;
+    reloadCooldown;
+    reloadCooldownActive;
 
     constructor() {
         super({
@@ -17,11 +21,14 @@ export class Gun extends Actor {
             collisionType: CollisionType.PreventCollision,
         });
 
-        this.shotCooldown = 200;
-        this.shotCooldownActive = false;
-        this.damage = 25;
         this.body.limitDegreeOfFreedom.push(DegreeOfFreedom.Rotation);
-        this.holdFire = false;
+        this.shotCooldown = 400;
+        this.reloadCooldown = 400;
+        this.shotCooldownActive = true;
+        this.reloadCooldownActive = false;
+        this.damage = 25;
+        this.maxAmmo = 8;
+        this.ammo = 8;
 
         this.shotCooldownTimer = new Timer({
             fcn: () => {
@@ -29,7 +36,15 @@ export class Gun extends Actor {
             },
             repeats: false,
             interval: this.shotCooldown
-        })
+        });
+
+        this.reloadTimer = new Timer({
+            fcn: () => {
+                this.reloadCooldownActive = false;
+            },
+            repeats: false,
+            interval: this.reloadCooldown
+        });
 
         this.graphics.use(Resources.Gun.toSprite());
         this.graphics.flipHorizontal = true;
@@ -42,6 +57,8 @@ export class Gun extends Actor {
 
     onInitialize(engine) {
         engine.currentScene.add(this.shotCooldownTimer);
+        engine.currentScene.add(this.reloadTimer);
+        this.shotCooldownTimer.start();
     }
 
     onPreUpdate(engine, delta) {
@@ -64,13 +81,23 @@ export class Gun extends Actor {
             this.shotCooldownActive = false;
         }
 
+        if (kb.isHeld(Keys.R)) {
+            this.reload();
+        }
+
+        if (kb.wasReleased(Keys.R)) {
+            this.reloadTimer.stop();
+            this.reloadCooldownActive = false;
+        }
+
+
     }
 
 
     shoot(engine) {
 
-        //Don't do anything before the cooldown has ended
-        if (this.shotCooldownActive) {
+        //Don't do anything before the cooldown has ended or if the gun has no ammo
+        if (this.shotCooldownActive || this.ammo <= 0) {
             return;
         }
 
@@ -83,6 +110,32 @@ export class Gun extends Actor {
         let bullet = new Bullet(this.rotation, this.getGlobalPos().clone(), this.damage);
 
         engine.currentScene.add(bullet);
+
+        //Handle ammo
+        this.ammo--;
+        engine.currentScene.updateAmmoUi(this);
+
+    }
+
+    reload() {
+
+        //Don't do anything if ammo is full or if the cooldown is active
+        if (this.ammo >= this.maxAmmo || this.reloadCooldownActive) {
+            return;
+        }
+
+        //Spin the gun?
+
+        //Add a single bullet
+        this.ammo++;
+
+        //Update Ui
+        this.scene.updateAmmoUi(this);
+
+        //Set the timer
+        this.reloadCooldownActive = true;
+        this.reloadTimer.start();
+
 
     }
 

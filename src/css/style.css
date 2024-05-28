@@ -5,6 +5,16 @@ body {
     box-sizing: border-box;
 }
 
+body::after {
+    position: absolute;
+    z-index: -1;
+    overflow: hidden;
+    height: 0;
+    width: 0;
+    content: url("/public/images/heart.png")
+            url("/public/images/heart_broken.png");
+}
+
 #root {
     position: relative;
 }
@@ -45,6 +55,16 @@ body {
     background-color: greenyellow;
     width: 0;
     height: 100%;
+}
+
+#healthAndAmmoContainer {
+    display: flex;
+    flex-direction: column;
+}
+
+#ammoContainer {
+    display: flex;
+    gap: 5px;
 }
 
 .heart {

@@ -7,7 +7,9 @@ const Resources = {
     Bullet: new ImageSource('images/bullet.png'),
     Background: new ImageSource('images/background_3.jpg'),
     Crosshair: new ImageSource('images/crosshair.png'),
-    Exp: new ImageSource('images/expOrb.png')
+    Exp: new ImageSource('images/expOrb.png'),
+    Heart: new ImageSource('images/heart.png'),
+    BrokenHeart: new ImageSource('images/heart_broken.png'),
 }
 const ResourceLoader = new Loader([
     Resources.Fish,
@@ -16,7 +18,9 @@ const ResourceLoader = new Loader([
     Resources.Bullet,
     Resources.Background,
     Resources.Crosshair,
-    Resources.Exp
+    Resources.Exp,
+    Resources.Heart,
+    Resources.BrokenHeart
 ])
 
 export { Resources, ResourceLoader }

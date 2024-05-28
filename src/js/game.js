@@ -2,6 +2,8 @@ import '../css/style.css';
 import {DisplayMode, Engine, Input, SolverStrategy} from "excalibur";
 import {ResourceLoader} from './resources.js';
 import {Church} from "./church.js";
+import {MainMenu} from "./mainMenu.js";
+import {GameOver} from "./gameOver.js";
 
 export class Game extends Engine {
 
@@ -14,7 +16,8 @@ export class Game extends Engine {
             canvasElementId: 'game',
             pointerScope: Input.PointerScope.Canvas,
             fixedUpdateFps: 60,
-            pixelArt: true
+            pixelArt: true,
+            suppressPlayButton: true
         })
         this.start(ResourceLoader).then(() => this.startGame())
     }
@@ -23,9 +26,14 @@ export class Game extends Engine {
     startGame() {
         console.log("start de game!");
 
+        this.add('mainMenu', new MainMenu);
         this.add('church', new Church);
+        this.add('gameOver', new GameOver);
 
-        this.goToScene('church');
+
+        this.goToScene('mainMenu');
+
+        console.log(this.scenes)
 
     }
 

@@ -8,53 +8,36 @@ import {Fish} from "./fish.js";
 export class Church extends Scene {
 
     random = new Random;
-    countdown = 600;
+    countdown;
     ui;
     uiClock;
     expBar;
     levelText;
     uiHearts;
     uiHealthContainer;
+    uiAmmo;
+    uiMaxAmmo;
     surviveTimer;
-    enemySpawnRate = 5;
-    enemySpawnAmount = 3;
+    enemySpawnRate;
+    enemySpawnAmount ;
     allowedEnemies = {
         fish: true
     };
-    gameOver = false;
+    gameOver = true;
 
     onInitialize(engine) {
 
         this.ui = document.getElementById('ui');
-        this.uiHearts = [];
 
-        const background = new Background;
-        this.add(background);
+        this.resetGame();
 
-        const knight = new Knight(new Gun());
-        this.add(knight);
+    }
 
-        this.surviveTimer = new Timer({
-            fcn: () => {
-                this.secondHandler()
-            },
-            repeats: true,
-            interval: 1000,
-            numberOfRepeats: 600
-        })
-
-        this.add(this.surviveTimer);
-        this.surviveTimer.start();
-
-        //Create UI elements with HTML
-        this.createUI(knight);
-
-
-        this.camera.strategy.lockToActor(knight)
-        this.camera.zoom = 2;
-        const boundingBox = new BoundingBox(0, 0, 1500, 1500)
-        this.camera.strategy.limitCameraBounds(boundingBox);
-
+    onActivate(context) {
+        super.onActivate(context);
+        if (this.gameOver) {
+            this.resetGame()
+        }
     }
 
 
@@ -89,6 +72,26 @@ export class Church extends Scene {
         let statContainer = document.createElement('div');
         statContainer.id = 'statContainer';
 
+        //Make container for health and ammo
+        let healthAndAmmoContainer = document.createElement('div');
+        healthAndAmmoContainer.id = 'healthAndAmmoContainer';
+
+        //Ammo
+        let ammoContainer = document.createElement('div');
+        ammoContainer.id = 'ammoContainer';
+
+        this.uiAmmo = document.createElement('p');
+        ammoContainer.appendChild(this.uiAmmo);
+        this.updateAmmoUi(knight.weapon);
+
+        let divider = document.createElement('p');
+        divider.innerText = '/';
+        ammoContainer.appendChild(divider);
+
+        this.uiMaxAmmo = document.createElement('p');
+        ammoContainer.appendChild(this.uiMaxAmmo);
+        this.updateMaxAmmoUi(knight.weapon);
+
 
         //Health
         this.uiHealthContainer = document.createElement('div');
@@ -96,6 +99,9 @@ export class Church extends Scene {
 
         //Add hearts equal to knight's starting health
         this.updateHealthUi(knight);
+
+        healthAndAmmoContainer.appendChild(this.uiHealthContainer);
+        healthAndAmmoContainer.appendChild(ammoContainer);
 
 
         //Exp
@@ -127,7 +133,7 @@ export class Church extends Scene {
 
 
         //Add them to the ui
-        statContainer.appendChild(this.uiHealthContainer);
+        statContainer.appendChild(healthAndAmmoContainer);
         statContainer.appendChild(expContainer);
         statContainer.appendChild(levelContainer);
         statContainer.appendChild(clockContainer);
@@ -140,6 +146,8 @@ export class Church extends Scene {
         //Stop the timer if the game ended
         if (this.gameOver) {
             this.surviveTimer.stop();
+            this.ui.innerHTML = '';
+            this.engine.goToScene('gameOver');
             return;
         }
 
@@ -198,6 +206,14 @@ export class Church extends Scene {
 
     }
 
+    updateAmmoUi(gun) {
+        this.uiAmmo.innerText = gun.ammo;
+    }
+
+    updateMaxAmmoUi(gun) {
+        this.uiMaxAmmo.innerText = gun.maxAmmo;
+    }
+
     updateExpUi(knight) {
         let percentage;
 
@@ -214,6 +230,47 @@ export class Church extends Scene {
 
     updateLevelUi(knight) {
         this.levelText.innerText = `Level ${knight.level}`;
+    }
+
+    resetGame() {
+        this.gameOver = false;
+
+        for (const actor of this.actors) {
+            actor.kill();
+        }
+
+        this.uiHearts = [];
+
+        this.countdown = 600;
+        this.enemySpawnRate = 5;
+        this.enemySpawnAmount = 3;
+
+        const background = new Background;
+        this.add(background);
+
+        const knight = new Knight(new Gun());
+        this.add(knight);
+
+        this.surviveTimer = new Timer({
+            fcn: () => {
+                this.secondHandler()
+            },
+            repeats: true,
+            interval: 1000,
+            numberOfRepeats: 600
+        })
+
+        this.add(this.surviveTimer);
+        this.surviveTimer.start();
+
+        //Create UI elements with HTML
+        this.createUI(knight);
+
+
+        this.camera.strategy.lockToActor(knight)
+        this.camera.zoom = 2;
+        const boundingBox = new BoundingBox(0, 0, 1500, 1500)
+        this.camera.strategy.limitCameraBounds(boundingBox);
     }
 
 }
