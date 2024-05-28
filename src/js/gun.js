@@ -1,4 +1,4 @@
-import {Actor, Vector, Timer, CollisionType, RotationType, DegreeOfFreedom} from "excalibur";
+import {Actor, Vector, Timer, CollisionType, RotationType, DegreeOfFreedom, Keys} from "excalibur";
 import {Resources} from './resources.js';
 import {Bullet} from './bullet.js';
 
@@ -8,6 +8,7 @@ export class Gun extends Actor {
     shotCooldownTimer;
     shotCooldownActive;
     damage;
+    holdFire;
 
     constructor() {
         super({
@@ -20,6 +21,7 @@ export class Gun extends Actor {
         this.shotCooldownActive = false;
         this.damage = 25;
         this.body.limitDegreeOfFreedom.push(DegreeOfFreedom.Rotation);
+        this.holdFire = false;
 
         this.shotCooldownTimer = new Timer({
             fcn: () => {
@@ -45,13 +47,23 @@ export class Gun extends Actor {
     onPreUpdate(engine, delta) {
         const kb = engine.input.keyboard;
 
-        if (kb.isHeld('ArrowRight') ||
-            kb.isHeld('ArrowUp') ||
-            kb.isHeld('ArrowLeft') ||
-            kb.isHeld('ArrowDown')
+        if (kb.isHeld(Keys.ArrowRight) ||
+            kb.isHeld(Keys.ArrowUp) ||
+            kb.isHeld(Keys.ArrowLeft) ||
+            kb.isHeld(Keys.ArrowDown)
         ){
-            this.shoot(engine);
+            this.actions.rotateTo(this.getRotateAngle(engine), 20, RotationType.ShortestPath);
         }
+
+        if (kb.isHeld(Keys.Space)) {
+            this.shoot(engine)
+        }
+
+        if (kb.wasReleased(Keys.Space)) {
+            this.shotCooldownTimer.stop();
+            this.shotCooldownActive = false;
+        }
+
     }
 
 
@@ -65,9 +77,6 @@ export class Gun extends Actor {
         //Handle cooldown after shooting
         this.shotCooldownActive = true;
         this.shotCooldownTimer.start();
-
-        //Rotate the gun based on input
-        this.actions.rotateTo(this.getRotateAngle(engine), 20, RotationType.ShortestPath);
 
 
         //Create a bullet
