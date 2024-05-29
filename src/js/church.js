@@ -1,4 +1,4 @@
-import {BoundingBox, Random, Scene, Timer, Vector} from "excalibur";
+import {BoundingBox, GlobalCoordinates, Random, Scene, Timer, Vector} from "excalibur";
 import {Background} from "./background.js";
 import {Knight} from "./knight.js";
 import {Gun} from "./gun.js";
@@ -30,6 +30,7 @@ export class Church extends Scene {
         this.ui = document.getElementById('ui');
 
         this.resetGame();
+
 
     }
 

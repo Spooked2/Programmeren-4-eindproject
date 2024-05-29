@@ -208,6 +208,8 @@ export class Knight extends Actor {
         //Update the UI
         this.engine.currentScene.updateLevelUi(this);
 
+        this.engine.goToScene('upgradeMenu');
+
     }
 
 

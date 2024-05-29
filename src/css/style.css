@@ -1,7 +1,12 @@
+
+:root {
+    --pixel-conversion: 1;
+}
+
 body {
-    margin:0;
-    padding:0;
-    background-color:darkgray;
+    margin: 0;
+    padding: 0;
+    background-color: darkgray;
     box-sizing: border-box;
 }
 
@@ -11,8 +16,12 @@ body::after {
     overflow: hidden;
     height: 0;
     width: 0;
-    content: url("/public/images/heart.png")
-            url("/public/images/heart_broken.png");
+    content: url("/public/images/heart.png") url("/public/images/heart_broken.png");
+}
+
+img {
+    width: 100%;
+    height: 100%;
 }
 
 #root {
@@ -21,34 +30,34 @@ body::after {
 
 #ui {
     position: absolute;
-
+    width: calc(1800px * var(--pixel-conversion));
 }
 
 #statContainer {
     width: 100%;
     display: flex;
-    padding: 15px 50px;
+    padding: calc(15px * var(--pixel-conversion)) calc(50px * var(--pixel-conversion));
     justify-content: space-between;
-    gap: 50px;
+    gap: calc(5px * var(--pixel-conversion));;
     align-items: center;
 }
 
 #healthContainer {
     display: flex;
-    gap: 5px;
+    gap: calc(5px * var(--pixel-conversion));;
 
     img {
-        max-width: 64px;
-        max-height: 64px;
+        max-width: calc(64px * var(--pixel-conversion));;
+        max-height: calc(64px * var(--pixel-conversion));;
     }
 }
 
 #expContainer {
     background-color: rgba(100, 100, 100, 35%);
-    width: 400px;
-    height: 10px;
-    border: solid black 2px;
-    border-radius: 3px;
+    width: calc(400px * var(--pixel-conversion));
+    height: calc(10px * var(--pixel-conversion));;
+    border: solid black calc(2px * var(--pixel-conversion));;
+    border-radius: calc(3px * var(--pixel-conversion));;
 }
 
 #expBar {
@@ -64,7 +73,7 @@ body::after {
 
 #ammoContainer {
     display: flex;
-    gap: 5px;
+    gap: calc(5px * var(--pixel-conversion));
 }
 
 .heart {
@@ -73,5 +82,14 @@ body::after {
 
 .broken {
     content: url("/public/images/heart_broken.png");
+}
+
+.upgradeBorder {
+    max-width: calc(147px * var(--pixel-conversion));
+    max-height: calc(147px * var(--pixel-conversion));
+}
+
+#upgradeMenuContainer {
+    display: none;
 }
 

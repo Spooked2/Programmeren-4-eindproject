@@ -1,9 +1,10 @@
 import '../css/style.css';
-import {DisplayMode, Engine, Input, SolverStrategy} from "excalibur";
+import {DisplayMode, Engine, Input, SolverStrategy, vec, Vector} from "excalibur";
 import {ResourceLoader} from './resources.js';
 import {Church} from "./church.js";
 import {MainMenu} from "./mainMenu.js";
 import {GameOver} from "./gameOver.js";
+import {UpgradeMenu} from "./upgradeMenu.js";
 
 export class Game extends Engine {
 
@@ -19,7 +20,7 @@ export class Game extends Engine {
             pixelArt: true,
             suppressPlayButton: true
         })
-        this.start(ResourceLoader).then(() => this.startGame())
+        this.start(ResourceLoader).then(() => this.startGame());
     }
 
 
@@ -29,6 +30,10 @@ export class Game extends Engine {
         this.add('mainMenu', new MainMenu);
         this.add('church', new Church);
         this.add('gameOver', new GameOver);
+        this.add('upgradeMenu', new UpgradeMenu);
+
+        this.screen.events.on('resize', () => calculateExPixelConversion(this.screen));
+        calculateExPixelConversion(this.screen);
 
 
         this.goToScene('mainMenu');
@@ -38,7 +43,18 @@ export class Game extends Engine {
     }
 
 
+
+
 }
 
 new Game();
+
+const calculateExPixelConversion = (screen) => {
+    const origin = screen.screenToPageCoordinates(Vector.Zero);
+    const singlePixel = screen.screenToPageCoordinates(vec(1, 0)).sub(origin);
+    const pixelConversion = singlePixel.x;
+    document.documentElement.style.setProperty('--pixel-conversion', pixelConversion.toString());
+}
+
+
 
