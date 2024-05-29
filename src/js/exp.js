@@ -10,7 +10,7 @@ export class Exp extends Actor {
     value;
 
     constructor(value, position) {
-        super({radius: 400});
+        super({radius: 600});
 
         this.graphics.use(Resources.Exp.toSprite());
 

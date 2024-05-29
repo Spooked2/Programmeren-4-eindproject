@@ -81,11 +81,11 @@ export class Gun extends Actor {
             this.shotCooldownActive = false;
         }
 
-        if (kb.isHeld(Keys.R)) {
+        if (kb.isHeld(Keys.Q)) {
             this.reload();
         }
 
-        if (kb.wasReleased(Keys.R)) {
+        if (kb.wasReleased(Keys.Q)) {
             this.reloadTimer.stop();
             this.reloadCooldownActive = false;
         }
