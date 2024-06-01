@@ -1,5 +1,5 @@
 import {Actor, Vector, Random, Keys, Timer, CollisionType, DegreeOfFreedom, Collider, CircleCollider} from "excalibur";
-import {Resources} from './resources.js';
+import {Resources, animate} from './resources.js';
 import {Enemy} from "./enemy.js";
 import {Exp} from "./exp.js";
 
@@ -19,6 +19,8 @@ export class Knight extends Actor {
     newExp;
     levelThreshold;
     level;
+    knightIdle;
+    knightWalk;
 
     constructor(selectedWeapon) {
         super({
@@ -26,6 +28,9 @@ export class Knight extends Actor {
             height: Resources.Knight.height,
             collisionType: CollisionType.Active
         });
+
+        this.knightIdle = animate(Resources.KnightIdle, 2, 1, 600);
+        this.knightWalk = animate(Resources.KnightWalk, 5, 4, 300);
 
         //Set properties
         this.moveSpeed = 120;
@@ -54,7 +59,7 @@ export class Knight extends Actor {
 
 
         //Set sprite
-        this.graphics.use(Resources.Knight.toSprite());
+        this.graphics.use(this.knightIdle);
         this.pos = new Vector(750, 750);
         this.scale = new Vector(0.5, 0.5);
 
@@ -82,6 +87,12 @@ export class Knight extends Actor {
 
         let kb = engine.input.keyboard;
         let acceleration = this.moveSpeed / 1.5;
+
+        if (kb.isHeld(Keys.W) || kb.isHeld(Keys.S) || kb.isHeld(Keys.A) || kb.isHeld(Keys.D)) {
+            this.graphics.use(this.knightWalk);
+        } else {
+            this.graphics.use(this.knightIdle);
+        }
 
         if (kb.isHeld(Keys.W)) {
             this.body.applyImpulse(this.pos, new Vector(0, -acceleration));

@@ -16,7 +16,7 @@ body::after {
     overflow: hidden;
     height: 0;
     width: 0;
-    content: url("/public/images/heart.png") url("/public/images/heart_broken.png");
+    content: url("/images/heart.png") url("/images/heart_broken.png");
 }
 
 img {
@@ -77,11 +77,11 @@ img {
 }
 
 .heart {
-    content: url("/public/images/heart.png");
+    content: url("/images/heart.png");
 }
 
 .broken {
-    content: url("/public/images/heart_broken.png");
+    content: url("/images/heart_broken.png");
 }
 
 .upgradeBorder {
