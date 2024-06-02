@@ -118,7 +118,7 @@ export class Gun extends Actor {
 
         //Create a bullet
         let bullet = new Bullet(this.rotation, this.getGlobalPos().clone(), this.damage);
-            bullet.pos.x -= i;
+            bullet.pos.x -= (i * 3);
 
         engine.currentScene.add(bullet);
 

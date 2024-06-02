@@ -27,6 +27,10 @@ const Resources = {
     Chest: new ImageSource('images/chest.png'),
     Cookie: new ImageSource('images/cookie.png'),
     Selector: new ImageSource('images/selector.png'),
+    Loss: new ImageSource('images/game_over.png'),
+    Win: new ImageSource('images/game_won.png'),
+    Splash: new ImageSource('images/splash.png'),
+    Tutorial: new ImageSource('images/tutorial.png'),
 }
 const ResourceLoader = new Loader([
     Resources.Fish,
@@ -48,6 +52,10 @@ const ResourceLoader = new Loader([
     Resources.Book,
     Resources.Chest,
     Resources.Cookie,
+    Resources.Loss,
+    Resources.Win,
+    Resources.Splash,
+    Resources.Tutorial,
 ])
 
 export { Resources, ResourceLoader }

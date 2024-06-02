@@ -5,6 +5,8 @@ import {Church} from "./church.js";
 import {MainMenu} from "./mainMenu.js";
 import {GameOver} from "./gameOver.js";
 import {UpgradeMenu} from "./upgradeMenu.js";
+import {Tutorial} from "./tutorial.js";
+import {GameWon} from "./gameWon.js";
 
 export class Game extends Engine {
 
@@ -30,6 +32,8 @@ export class Game extends Engine {
         this.add('mainMenu', new MainMenu);
         this.add('church', new Church);
         this.add('gameOver', new GameOver);
+        this.add('gameWon', new GameWon);
+        this.add('tutorial', new Tutorial);
         this.add('upgradeMenu', new UpgradeMenu);
 
         this.screen.events.on('resize', () => calculateExPixelConversion(this.screen));

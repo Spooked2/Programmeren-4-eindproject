@@ -23,7 +23,6 @@ export class Church extends Scene {
     surviveTimer;
     enemySpawnData;
     gameOver = true;
-    survived = false;
     knight;
 
     onInitialize(engine) {
@@ -43,8 +42,10 @@ export class Church extends Scene {
             return;
         }
 
+        if (context.data !== undefined) {
         context.data.applyUpgrade(this.knight);
         this.updateMaxAmmoUi(this.knight.weapon);
+        }
     }
 
 
@@ -174,7 +175,10 @@ export class Church extends Scene {
         //Handle win
         if (this.countdown <= 0) {
             this.gameOver = true;
-            this.survived = true;
+
+            //Stop the timer and clear the UI
+            this.surviveTimer.stop();
+            this.ui.innerHTML = '';
 
             //Kill all enemies
             for (const actor of this.actors) {
@@ -184,6 +188,20 @@ export class Church extends Scene {
             }
 
             //Save score
+            let victories = Number(localStorage.getItem("victories"));
+            victories++;
+            localStorage.setItem("attempts", `${victories}`);
+
+            const victoryTimer = new Timer({
+                fcn: () => {
+                    this.engine.goToScene('gameWon')
+                },
+                repeats: false,
+                interval: 5000,
+            });
+
+            this.add(victoryTimer);
+            victoryTimer.start();
 
             return;
         }
@@ -282,8 +300,12 @@ export class Church extends Scene {
     }
 
     resetGame() {
+
+        let attempts = Number(localStorage.getItem("attempts"));
+        attempts++;
+        localStorage.setItem("attempts", `${attempts}`);
+
         this.gameOver = false;
-        this.survived = false;
 
         for (const actor of this.actors) {
             actor.kill();
@@ -343,13 +365,13 @@ export class Church extends Scene {
 
             //Make lice spawn
             louse.spawnAmount = 1;
-            louse.spawnRate = 5;
+            louse.spawnRate = 8;
         }
 
         if (time === '8:30') {
 
             //More lice
-            louse.spawnRate = 3;
+            louse.spawnRate = 5;
 
         }
 
@@ -364,7 +386,7 @@ export class Church extends Scene {
 
             //Fewer lice
             louse.spawnAmount = 2;
-            louse.spawnRate = 8;
+            louse.spawnRate = 10;
 
             //Yet more ants
             ant.spawnRate = 3;
