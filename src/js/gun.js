@@ -13,6 +13,8 @@ export class Gun extends Actor {
     reloadTimer;
     reloadCooldown;
     reloadCooldownActive;
+    reloadAmount;
+    fireAmount;
 
     constructor() {
         super({
@@ -29,6 +31,8 @@ export class Gun extends Actor {
         this.damage = 25;
         this.maxAmmo = 8;
         this.ammo = 8;
+        this.reloadAmount = 1;
+        this.fireAmount = 1;
 
         this.shotCooldownTimer = new Timer({
             fcn: () => {
@@ -106,14 +110,23 @@ export class Gun extends Actor {
         this.shotCooldownTimer.start();
 
 
+        for (let i = 0; i < this.fireAmount; i++) {
+
+            if (this.ammo <= 0) {
+                return
+            }
+
         //Create a bullet
         let bullet = new Bullet(this.rotation, this.getGlobalPos().clone(), this.damage);
+            bullet.pos.x -= i;
 
         engine.currentScene.add(bullet);
 
         //Handle ammo
         this.ammo--;
         engine.currentScene.updateAmmoUi(this);
+
+        }
 
     }
 
@@ -126,8 +139,12 @@ export class Gun extends Actor {
 
         //Spin the gun?
 
-        //Add a single bullet
-        this.ammo++;
+        //Add bullets
+        this.ammo += this.reloadAmount;
+        //Make sure you don't go over the limit
+        if (this.ammo > this.maxAmmo) {
+            this.ammo = this.maxAmmo;
+        }
 
         //Update Ui
         this.scene.updateAmmoUi(this);

@@ -24,6 +24,7 @@ export class Church extends Scene {
     enemySpawnData;
     gameOver = true;
     survived = false;
+    knight;
 
     onInitialize(engine) {
 
@@ -36,9 +37,14 @@ export class Church extends Scene {
 
     onActivate(context) {
         super.onActivate(context);
+
         if (this.gameOver) {
-            this.resetGame()
+            this.resetGame();
+            return;
         }
+
+        context.data.applyUpgrade(this.knight);
+        this.updateMaxAmmoUi(this.knight.weapon);
     }
 
 
@@ -300,6 +306,7 @@ export class Church extends Scene {
 
         const knight = new Knight(new Gun());
         this.add(knight);
+        this.knight = knight;
 
         this.surviveTimer = new Timer({
             fcn: () => {

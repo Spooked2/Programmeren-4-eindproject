@@ -20,7 +20,13 @@ const Resources = {
     Exp: new ImageSource('images/expOrb.png'),
     Heart: new ImageSource('images/heart.png'),
     BrokenHeart: new ImageSource('images/heart_broken.png'),
-    LevelUpBackground: new ImageSource('images/level_up_background.png')
+    LevelUpBackground: new ImageSource('images/level_up_background.png'),
+    Water: new ImageSource('images/holy_water.png'),
+    Scroll: new ImageSource('images/prayer_scroll.png'),
+    Book: new ImageSource('images/blessed_book.png'),
+    Chest: new ImageSource('images/chest.png'),
+    Cookie: new ImageSource('images/cookie.png'),
+    Selector: new ImageSource('images/selector.png'),
 }
 const ResourceLoader = new Loader([
     Resources.Fish,
@@ -35,7 +41,13 @@ const ResourceLoader = new Loader([
     Resources.Exp,
     Resources.Heart,
     Resources.BrokenHeart,
-    Resources.LevelUpBackground
+    Resources.LevelUpBackground,
+    Resources.Selector,
+    Resources.Water,
+    Resources.Scroll,
+    Resources.Book,
+    Resources.Chest,
+    Resources.Cookie,
 ])
 
 export { Resources, ResourceLoader }

@@ -36,7 +36,7 @@ export class Louse extends Enemy {
 
     explode(engine) {
 
-        let explosion = new Explosion(this.pos.clone(), 50, 100);
+        let explosion = new Explosion(this.pos.clone(), 50, 75);
 
         engine.add(explosion);
 
