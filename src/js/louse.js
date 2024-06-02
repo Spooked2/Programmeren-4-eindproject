@@ -1,6 +1,7 @@
 import {Vector, Random, CollisionType} from "excalibur";
 import {animate, Resources} from './resources.js';
 import {Enemy} from "./enemy.js";
+import {Explosion} from "./explosion.js";
 
 const random = new Random;
 
@@ -9,7 +10,9 @@ export class Louse extends Enemy {
     louseWalk;
 
     constructor(spawnPosition) {
-        super(Resources.Knight.width, Resources.Knight.height);
+        super(128, 128, 80, 30, 2);
+
+        this.specialDeath = true;
 
         this.louseWalk = animate(Resources.LouseWalk, 2, 1, 400);
 
@@ -23,9 +26,21 @@ export class Louse extends Enemy {
     onInitialize(engine) {
         this.initializeSuper(engine);
 
-        this.health = 25;
-        this.speed = 90;
+    }
 
+    onPreUpdate(engine, delta) {
+        if (this.health <= 0) {
+            this.explode(engine);
+        }
+    }
+
+    explode(engine) {
+
+        let explosion = new Explosion(this.pos.clone(), 50, 100);
+
+        engine.add(explosion);
+
+        this.deathHandler();
     }
 
 

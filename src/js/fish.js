@@ -1,13 +1,12 @@
-import {Vector, Random, CollisionType} from "excalibur";
+import {Vector} from "excalibur";
 import {Resources} from './resources.js';
 import {Enemy} from "./enemy.js";
 
-const random = new Random;
 
 export class Fish extends Enemy {
 
     constructor(spawnPosition) {
-        super(Resources.Fish.width, Resources.Fish.height);
+        super(Resources.Fish.width, Resources.Fish.height, 60, 50, 1);
 
         this.graphics.use(Resources.Fish.toSprite());
 
@@ -17,9 +16,6 @@ export class Fish extends Enemy {
 
     onInitialize(engine) {
         this.initializeSuper(engine);
-
-        this.health = 50;
-        this.speed = 60;
 
     }
 

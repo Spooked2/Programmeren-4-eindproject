@@ -1,9 +1,8 @@
-import {Actor, Vector, Random, Keys, Timer, CollisionType, DegreeOfFreedom, Collider, CircleCollider} from "excalibur";
+import {Actor, Vector, Keys, Timer, CollisionType, DegreeOfFreedom} from "excalibur";
 import {Resources, animate} from './resources.js';
 import {Enemy} from "./enemy.js";
 import {Exp} from "./exp.js";
-
-const random = new Random;
+import {Explosion} from "./explosion.js";
 
 export class Knight extends Actor {
 
@@ -24,13 +23,13 @@ export class Knight extends Actor {
 
     constructor(selectedWeapon) {
         super({
-            width: Resources.Knight.width,
-            height: Resources.Knight.height,
+            width: 128,
+            height: 128,
             collisionType: CollisionType.Active
         });
 
         this.knightIdle = animate(Resources.KnightIdle, 2, 1, 600);
-        this.knightWalk = animate(Resources.KnightWalk, 5, 4, 300);
+        this.knightWalk = animate(Resources.KnightWalk, 5, 4, 100);
 
         //Set properties
         this.moveSpeed = 120;
@@ -148,19 +147,24 @@ export class Knight extends Actor {
             return;
         }
 
+
+
         //Don't do anything if player collides with things that aren't an enemy or if the player is invincible
-        if (!(e.other instanceof Enemy) || this.invincible === true) {
+        if (!(e.other instanceof Enemy) && !(e.other instanceof Explosion) || this.invincible === true) {
             return;
         }
 
-        //Subtract 1 health
-        this.health--;
+        let damageAmount = 1;
 
-        //Update the UI
-        this.engine.currentScene.updateHealthUi(this);
+        if (e.other instanceof Explosion) {
+            damageAmount = 2;
+        }
+
+        //Handle health
+        this.hitFor(damageAmount);
 
         //Don't bother with anything else if health is 0
-        if (this.health === 0) {
+        if (this.health <= 0) {
             this.engine.currentScene.gameOver = true;
             return;
         }
@@ -177,6 +181,14 @@ export class Knight extends Actor {
         this.invincibilityTimer.start();
 
 
+    }
+
+    hitFor(damage) {
+        //Subtract health
+        this.health -= damage;
+
+        //Update the UI
+        this.engine.currentScene.updateHealthUi(this);
     }
 
     expHandler(expOrb) {
@@ -207,8 +219,6 @@ export class Knight extends Actor {
 
     levelUp() {
 
-        //Prompt player to pick an upgrade
-        //Pause the entire game until upgrade is chosen
 
         //Update variable
         this.level++;
@@ -219,6 +229,8 @@ export class Knight extends Actor {
         //Update the UI
         this.engine.currentScene.updateLevelUi(this);
 
+        //Prompt player to pick an upgrade
+        //Pause the entire game until upgrade is chosen
         this.engine.goToScene('upgradeMenu');
 
     }

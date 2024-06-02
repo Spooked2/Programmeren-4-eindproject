@@ -12,8 +12,9 @@ export class Enemy extends Actor {
     knight;
     engine;
     expValue;
+    specialDeath;
 
-    constructor(width, height) {
+    constructor(width, height, speed, health, expValue) {
         super({
             height: height,
             width: width,
@@ -21,12 +22,13 @@ export class Enemy extends Actor {
         });
 
         //Initialize some default values just in case
-        this.health = 25;
-        this.speed = 60;
-        this.expValue = 1;
+        this.health = health;
+        this.speed = speed;
+        this.expValue = expValue;
         this.body.bounciness = 0;
         this.body.limitDegreeOfFreedom.push(DegreeOfFreedom.Rotation);
         this.body.mass = 10;
+        this.specialDeath = false;
 
     }
 
@@ -59,7 +61,7 @@ export class Enemy extends Actor {
 
         this.health -= damage;
 
-        if (this.health <= 0) {
+        if (this.health <= 0 && !this.specialDeath) {
             this.deathHandler();
         }
 

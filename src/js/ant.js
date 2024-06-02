@@ -1,4 +1,4 @@
-import {Vector, Random, CollisionType} from "excalibur";
+import {Vector, Random} from "excalibur";
 import {animate, Resources} from './resources.js';
 import {Enemy} from "./enemy.js";
 
@@ -8,7 +8,7 @@ export class Ant extends Enemy {
 
     antWalk;
     constructor(spawnPosition) {
-        super(Resources.Knight.width, Resources.Knight.height);
+        super(128, 128, 60, 60, 1);
 
         this.antWalk = animate(Resources.AntWalk, 2, 1, 200);
 
@@ -20,9 +20,6 @@ export class Ant extends Enemy {
 
     onInitialize(engine) {
         this.initializeSuper(engine);
-
-        this.health = 50;
-        this.speed = 60;
 
     }
 

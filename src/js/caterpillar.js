@@ -1,4 +1,4 @@
-import {Vector, Random, CollisionType} from "excalibur";
+import {Vector, Random} from "excalibur";
 import {animate, Resources} from './resources.js';
 import {Enemy} from "./enemy.js";
 
@@ -8,7 +8,7 @@ export class Caterpillar extends Enemy {
 
     caterpillarWalk;
     constructor(spawnPosition) {
-        super(Resources.Knight.width, Resources.Knight.height);
+        super(128, 64, 40, 160, 5);
 
         this.caterpillarWalk = animate(Resources.CaterpillarWalk, 2, 1, 500);
 
@@ -21,9 +21,6 @@ export class Caterpillar extends Enemy {
 
     onInitialize(engine) {
         this.initializeSuper(engine);
-
-        this.health = 100;
-        this.speed = 40;
 
     }
 

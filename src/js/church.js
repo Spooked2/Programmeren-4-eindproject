@@ -1,8 +1,11 @@
-import {BoundingBox, GlobalCoordinates, Random, Scene, Timer, Vector} from "excalibur";
+import {BoundingBox, Random, Scene, Timer, Vector} from "excalibur";
 import {Background} from "./background.js";
 import {Knight} from "./knight.js";
 import {Gun} from "./gun.js";
-import {Fish} from "./fish.js";
+import {Ant} from "./ant.js";
+import {Caterpillar} from "./caterpillar.js";
+import {Louse} from "./louse.js";
+import {Enemy} from "./enemy.js";
 
 
 export class Church extends Scene {
@@ -18,12 +21,9 @@ export class Church extends Scene {
     uiAmmo;
     uiMaxAmmo;
     surviveTimer;
-    enemySpawnRate;
-    enemySpawnAmount ;
-    allowedEnemies = {
-        fish: true
-    };
+    enemySpawnData;
     gameOver = true;
+    survived = false;
 
     onInitialize(engine) {
 
@@ -165,14 +165,47 @@ export class Church extends Scene {
 
         this.uiClock.innerText = `${Math.floor(this.countdown / 60)}:${extraZero}${this.countdown % 60}`;
 
+        //Handle win
+        if (this.countdown <= 0) {
+            this.gameOver = true;
+            this.survived = true;
+
+            //Kill all enemies
+            for (const actor of this.actors) {
+                if ((actor instanceof Enemy)) {
+                actor.deathHandler();
+                }
+            }
+
+            //Save score
+
+            return;
+        }
+
 
         //Handle enemy spawning
-        if ((this.countdown % this.enemySpawnRate) === 0) {
-            for (let i = 0; i < this.enemySpawnAmount; i++) {
-                let fish = new Fish(this.enemySpawnPosition());
-                this.add(fish);
+
+        for (const [key, enemy] of Object.entries(this.enemySpawnData)) {
+
+            //Don't do anything if the enemy doesn't have a spawn rate
+            if (enemy.spawnRate === 0) {
+                continue
             }
+
+            if ((this.countdown % enemy.spawnRate) === 0) {
+
+                //Add enemies to scene based on the spawn amount
+                for (let i = 0; i < enemy.spawnAmount; i++) {
+                    this.add(enemy.makeNew())
+                }
+
+            }
+
+
         }
+
+        //Handle changes based on time
+        this.handleTime(this.uiClock.innerText);
 
 
     }
@@ -186,6 +219,15 @@ export class Church extends Scene {
             this.uiHearts.unshift(heart);
             this.uiHealthContainer.appendChild(heart);
 
+        }
+
+
+        //If the knight's health is negative or 0, just set every heart to broken
+        if (knight.health <= 0) {
+            for (const uiHeart of this.uiHearts) {
+                uiHeart.classList.replace('heart', 'broken');
+            }
+            return;
         }
 
         let difference = knight.healthMax - knight.health;
@@ -235,6 +277,7 @@ export class Church extends Scene {
 
     resetGame() {
         this.gameOver = false;
+        this.survived = false;
 
         for (const actor of this.actors) {
             actor.kill();
@@ -243,8 +286,14 @@ export class Church extends Scene {
         this.uiHearts = [];
 
         this.countdown = 600;
-        this.enemySpawnRate = 5;
-        this.enemySpawnAmount = 3;
+
+        let game = this;
+
+        this.enemySpawnData = {
+            ant: {spawnAmount: 3, spawnRate: 5, makeNew() {return new Ant(game.enemySpawnPosition())}},
+            caterpillar: {spawnAmount: 0, spawnRate: 0, makeNew() {return new Caterpillar(game.enemySpawnPosition())}},
+            louse: {spawnAmount: 0, spawnRate: 0, makeNew() {return new Louse(game.enemySpawnPosition())}}
+        };
 
         const background = new Background;
         this.add(background);
@@ -274,4 +323,144 @@ export class Church extends Scene {
         this.camera.strategy.limitCameraBounds(boundingBox);
     }
 
+    handleTime(time) {
+
+        const ant = this.enemySpawnData.ant;
+        const louse = this.enemySpawnData.louse;
+        const caterpillar = this.enemySpawnData.caterpillar;
+
+        if (time === '9:00') {
+
+            //Make ants spawn slightly faster
+            ant.spawnRate = 4;
+
+            //Make lice spawn
+            louse.spawnAmount = 1;
+            louse.spawnRate = 5;
+        }
+
+        if (time === '8:30') {
+
+            //More lice
+            louse.spawnRate = 3;
+
+        }
+
+        if (time === '8:00') {
+
+            //More ants
+            ant.spawnAmount = 5;
+
+        }
+
+        if (time === '7:00') {
+
+            //Fewer lice
+            louse.spawnAmount = 2;
+            louse.spawnRate = 8;
+
+            //Yet more ants
+            ant.spawnRate = 3;
+
+        }
+
+        if (time === '6:00') {
+
+            //MORE. ANTS.
+            ant.spawnRate = 2;
+            ant.spawnAmount = 7;
+
+        }
+
+        if (time === '5:20') {
+
+            //A moment to breathe
+            ant.spawnRate = 0;
+            ant.spawnAmount = 0;
+            louse.spawnAmount = 0;
+            louse.spawnRate = 0;
+
+        }
+
+        if (time === '5:00') {
+
+            //The caterpillars approach
+            caterpillar.spawnAmount = 2;
+            caterpillar.spawnRate = 5;
+
+        }
+
+        if (time === '4:30') {
+
+            //Add more caterpillars
+            caterpillar.spawnRate = 4;
+
+        }
+
+        if (time === '4:00') {
+
+            //Bring back the lice
+            louse.spawnAmount = 1;
+            louse.spawnRate = 2;
+
+            //Make the caterpillars spawn more 'wave-y'
+            caterpillar.spawnAmount = 4;
+            caterpillar.spawnRate = 5;
+
+        }
+
+        if (time === '3:00') {
+
+            //Add some ants
+            ant.spawnRate = 3;
+            ant.spawnAmount = 3;
+
+        }
+
+        if (time === '2:00') {
+
+            //Ant rush
+            ant.spawnAmount = 8;
+            ant.spawnRate = 2;
+            louse.spawnRate = 6;
+            caterpillar.spawnAmount = 0;
+
+        }
+
+        if (time === '1:00') {
+
+            //Caterpillar rush
+            ant.spawnAmount = 0;
+            ant.spawnRate = 0;
+            caterpillar.spawnAmount = 6;
+            caterpillar.spawnRate = 2;
+
+
+        }
+
+        if (time === '0:30') {
+
+            //Final stand
+            ant.spawnAmount = 5;
+            ant.spawnRate = 2;
+            louse.spawnAmount = 2;
+
+        }
+
+        if (time === '0:10') {
+
+            //Cleanup time
+            ant.spawnRate = 1;
+            ant.spawnAmount = 1;
+            louse.spawnAmount = 1;
+            louse.spawnRate = 5;
+            caterpillar.spawnAmount = 1;
+            caterpillar.spawnRate = 3;
+        }
+
+
+
+    }
+
 }
+
